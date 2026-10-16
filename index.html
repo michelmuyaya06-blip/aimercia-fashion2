@@ -44,10 +44,11 @@ header{background:linear-gradient(135deg,#d4a574,#8b5a3c);color:#fff;padding:1re
 .cart-item-info{flex:1}
 .cart-item-name{font-weight:bold;margin-bottom:.3rem;font-size:.9rem}
 .cart-item-status{font-size:.8rem;color:#d4a574;font-style:italic}
-.cart-item-price{color:#8b5a3c;font-weight:bold}
 .remove-item{background:#c9302c;color:#fff;border:none;padding:.3rem .8rem;border-radius:15px;cursor:pointer;font-size:.8rem}
-.cart-total{margin-top:1.5rem;padding-top:1rem;border-top:2px solid #f0f0f0;font-size:1.4rem;font-weight:bold;text-align:right;color:#8b5a3c}
-.checkout-btn{width:100%;background:#25D366;color:#fff;border:none;padding:1rem;border-radius:25px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:1rem}
+.cart-total{margin-top:1.5rem;padding-top:1rem;border-top:2px solid #f0f0f0;font-size:1.2rem;font-weight:bold;text-align:right;color:#8b5a3c}
+.checkout-btn{width:100%;border:none;padding:1rem;border-radius:25px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:.8rem;color:#fff}
+.btn-1{background:#25D366}
+.btn-2{background:#128C7E}
 .payment-info{background:#f0f8ff;border:1px solid #b3d9ff;border-radius:10px;padding:1rem;margin-top:1rem;text-align:center;font-size:.9rem;color:#0056b3}
 .empty-cart{text-align:center;padding:2rem;color:#999}
 footer{background:#3d2817;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
@@ -80,13 +81,18 @@ footer{background:#3d2817;color:#fff;text-align:center;padding:2rem;margin-top:3
 </div>
 <div id="cartItems"></div>
 <div class="cart-total" id="cartTotal"></div>
-<button class="checkout-btn" onclick="checkoutWhatsApp()">Commander par WhatsApp</button>
+
+<!-- BOUTON 1 : Premier numéro -->
+<button class="checkout-btn btn-1" onclick="commander('243970095825')"> Commander (Ligne 1 : 097...)</button>
+
+<!-- BOUTON 2 : Deuxième numéro -->
+<button class="checkout-btn btn-2" onclick="commander('243837274532')">📱 Commander (Ligne 2 : 083...)</button>
+
 <div class="payment-info">M-Pesa, Airtel Money, Orange Money acceptés</div>
 </div>
 </div>
 <footer>Aimercia-Fashion - Votre destination mode en RDC</footer>
 <script>
-const WHATSAPP_NUMBER="243970095825";
 const products=[
 {id:1,name:"Perruque Bob Lisse Noire",description:"Coupe bob élégante et lisse",price:150,image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/2e5de97411c78a18ba323010fb694c59.jpg",category:"perruque",inStock:true},
 {id:2,name:"Perruque Bouclée Naturelle",description:"Boucles définies, look naturel",price:180,image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/e5f04db4c4599f3b5b0dcc4cea059a05.jpg",category:"perruque",inStock:true},
@@ -126,19 +132,19 @@ const items=document.getElementById('cartItems');
 const total=document.getElementById('cartTotal');
 if(cart.length===0){items.innerHTML='<div class="empty-cart">Panier vide</div>';total.innerHTML='';return;}
 items.innerHTML=cart.map(i=>'<div class="cart-item"><img src="'+i.image+'" alt="'+i.name+'"><div class="cart-item-info"><div class="cart-item-name">'+i.name+' x'+i.quantity+'</div>'+(!i.inStock?'<div class="cart-item-status">Livraison 5-10 jours</div>':'')+'</div><button class="remove-item" onclick="removeFromCart('+i.id+')">Retirer</button></div>').join('');
-total.innerHTML='Nombre d\'articles : '+cart.reduce((s,i)=>s+i.quantity,0);
+total.innerHTML='Articles : '+cart.reduce((s,i)=>s+i.quantity,0);
 }
 function toggleCart(){
 const m=document.getElementById('cartModal');
 m.classList.toggle('active');
 if(m.classList.contains('active'))displayCart();
 }
-function checkoutWhatsApp(){
-if(cart.length===0){alert('Panier vide !');return;}
+function commander(numero){
+if(cart.length===0){alert('Votre panier est vide !');return;}
 let msg='🛍️ *Nouvelle commande Aimercia-Fashion*\n\n';
 cart.forEach(i=>{msg+='▪️ '+i.name+' (x'+i.quantity+')\n';});
-msg+='\n💬 *Je souhaite connaître les prix et les modalités de paiement.*\n\nMerci de me contacter.';
-window.open('https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(msg),'_blank');
+msg+='\n *Je souhaite connaître les prix et les modalités de paiement.*\n\nMerci de me contacter.';
+window.open('https://wa.me/'+numero+'?text='+encodeURIComponent(msg),'_blank');
 }
 displayProducts();updateCartCount();
 </script>
