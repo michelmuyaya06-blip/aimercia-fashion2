@@ -1,241 +1,146 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aimercia-Fashion - Mode & Perruques RDC</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #faf7f5; color: #333; }
-        header { background: linear-gradient(135deg, #d4a574 0%, #8b5a3c 100%); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
-        .logo { font-size: 1.8rem; font-weight: bold; letter-spacing: 2px; }
-        .logo span { font-style: italic; color: #ffe4c4; }
-        .cart-btn { background: white; color: #8b5a3c; border: none; padding: 0.6rem 1.2rem; border-radius: 25px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
-        .cart-btn:hover { transform: scale(1.05); }
-        .cart-count { background: #c9302c; color: white; border-radius: 50%; padding: 2px 8px; font-size: 0.8rem; margin-left: 5px; }
-        .hero { background: linear-gradient(135deg, #d4a574 0%, #8b5a3c 100%); color: white; text-align: center; padding: 4rem 2rem; }
-        .hero h1 { font-size: 3rem; margin-bottom: 1rem; letter-spacing: 3px; font-weight: 300; }
-        .hero h1 strong { font-weight: 700; font-style: italic; }
-        .hero p { font-size: 1.2rem; opacity: 0.95; margin-bottom: 0.5rem; }
-        .hero .subtitle { font-size: 1rem; background: rgba(255,255,255,0.2); display: inline-block; padding: 0.6rem 1.8rem; border-radius: 25px; margin-top: 1.5rem; }
-        .info-bar { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 1rem 2rem; text-align: center; font-size: 0.95rem; color: #2e7d32; }
-        .products-section { padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
-        .section-title { text-align: center; font-size: 2.2rem; margin-bottom: 0.5rem; color: #8b5a3c; font-weight: 300; letter-spacing: 2px; }
-        .section-subtitle { text-align: center; color: #999; margin-bottom: 2rem; font-style: italic; }
-        .category-filter { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-        .filter-btn { background: white; border: 2px solid #d4a574; color: #8b5a3c; padding: 0.6rem 1.8rem; border-radius: 25px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
-        .filter-btn.active, .filter-btn:hover { background: #d4a574; color: white; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2rem; }
-        .product-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(139, 90, 60, 0.1); transition: transform 0.3s, box-shadow 0.3s; position: relative; }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(139, 90, 60, 0.2); }
-        .product-badge { position: absolute; top: 10px; right: 10px; background: #c9302c; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.75rem; font-weight: bold; z-index: 10; }
-        .product-badge.preorder { background: #d4a574; }
-        .product-image { width: 100%; height: 220px; background: linear-gradient(135deg, #f5d5b8 0%, #d4a574 100%); display: flex; align-items: center; justify-content: center; font-size: 5rem; }
-        .product-info { padding: 1.5rem; }
-        .product-name { font-size: 1.1rem; font-weight: bold; margin-bottom: 0.5rem; color: #333; min-height: 50px;}
-        .product-description { color: #777; font-size: 0.85rem; margin-bottom: 1rem; min-height: 40px; }
-        .product-footer { display: flex; justify-content: space-between; align-items: center; }
-        .product-price { font-size: 1.4rem; font-weight: bold; color: #8b5a3c; }
-        .add-to-cart { background: #d4a574; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 25px; cursor: pointer; font-weight: bold; transition: background 0.3s; font-size: 0.9rem;}
-        .add-to-cart:hover { background: #8b5a3c; }
-        .add-to-cart.preorder { background: #c9302c; }
-        .cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 200; justify-content: center; align-items: center; }
-        .cart-modal.active { display: flex; }
-        .cart-content { background: white; border-radius: 15px; padding: 2rem; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
-        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f0f0f0; padding-bottom: 1rem; }
-        .cart-header h2 { color: #8b5a3c; }
-        .close-cart { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid #f0f0f0; }
-        .cart-item-info { flex: 1; }
-        .cart-item-name { font-weight: bold; margin-bottom: 0.3rem; font-size: 0.95rem; }
-        .cart-item-status { font-size: 0.8rem; color: #d4a574; font-style: italic; }
-        .cart-item-price { color: #8b5a3c; font-weight: bold; }
-        .remove-item { background: #c9302c; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 15px; cursor: pointer; font-size: 0.8rem; }
-        .cart-total { margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #f0f0f0; font-size: 1.4rem; font-weight: bold; text-align: right; color: #8b5a3c; }
-        .checkout-btn { width: 100%; background: #25D366; color: white; border: none; padding: 1rem; border-radius: 25px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 1rem; transition: transform 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .checkout-btn:hover { transform: scale(1.02); background: #128C7E; }
-        .payment-info { background: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 10px; padding: 1rem; margin-top: 1rem; text-align: center; font-size: 0.9rem; color: #0056b3; }
-        .payment-info strong { display: block; margin-bottom: 0.5rem; }
-        .empty-cart { text-align: center; padding: 2rem; color: #999; }
-        footer { background: #3d2817; color: white; text-align: center; padding: 2.5rem 2rem; margin-top: 3rem; }
-        .footer-brand { font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 1rem; color: #d4a574; }
-        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .section-title { font-size: 1.8rem; } .logo { font-size: 1.3rem; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aimercia-Fashion</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#faf7f5;color:#333}
+header{background:linear-gradient(135deg,#d4a574,#8b5a3c);color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.logo{font-size:1.8rem;font-weight:bold}
+.cart-btn{background:#fff;color:#8b5a3c;border:none;padding:.6rem 1.2rem;border-radius:25px;cursor:pointer;font-weight:bold}
+.cart-count{background:#c9302c;color:#fff;border-radius:50%;padding:2px 8px;font-size:.8rem;margin-left:5px}
+.hero{background:linear-gradient(135deg,#d4a574,#8b5a3c);color:#fff;text-align:center;padding:4rem 2rem}
+.hero h1{font-size:3rem;margin-bottom:1rem}
+.hero p{font-size:1.2rem}
+.info-bar{background:#e8f5e9;border-left:4px solid #4caf50;padding:1rem 2rem;text-align:center;color:#2e7d32}
+.products-section{padding:3rem 2rem;max-width:1200px;margin:0 auto}
+.section-title{text-align:center;font-size:2.2rem;color:#8b5a3c;margin-bottom:2rem}
+.category-filter{display:flex;justify-content:center;gap:1rem;margin-bottom:2rem;flex-wrap:wrap}
+.filter-btn{background:#fff;border:2px solid #d4a574;color:#8b5a3c;padding:.6rem 1.8rem;border-radius:25px;cursor:pointer;font-weight:bold}
+.filter-btn.active,.filter-btn:hover{background:#d4a574;color:#fff}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2rem}
+.product-card{background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,.1);position:relative}
+.product-badge{position:absolute;top:10px;right:10px;background:#c9302c;color:#fff;padding:.3rem .8rem;border-radius:15px;font-size:.75rem;font-weight:bold}
+.product-badge.preorder{background:#d4a574}
+.product-image{width:100%;height:250px;background:#f0f0f0;overflow:hidden}
+.product-image img{width:100%;height:100%;object-fit:cover}
+.product-info{padding:1.5rem}
+.product-name{font-size:1.1rem;font-weight:bold;margin-bottom:.5rem}
+.product-description{color:#777;font-size:.85rem;margin-bottom:1rem}
+.product-footer{display:flex;justify-content:space-between;align-items:center}
+.product-price{font-size:1rem;font-weight:bold;color:#d4a574;font-style:italic}
+.add-to-cart{background:#d4a574;color:#fff;border:none;padding:.6rem 1.2rem;border-radius:25px;cursor:pointer;font-weight:bold}
+.add-to-cart.preorder{background:#c9302c}
+.cart-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:200;justify-content:center;align-items:center}
+.cart-modal.active{display:flex}
+.cart-content{background:#fff;border-radius:15px;padding:2rem;max-width:500px;width:90%;max-height:80vh;overflow-y:auto}
+.cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;border-bottom:2px solid #f0f0f0;padding-bottom:1rem}
+.cart-header h2{color:#8b5a3c}
+.close-cart{background:none;border:none;font-size:1.5rem;cursor:pointer}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid #f0f0f0;gap:1rem}
+.cart-item img{width:60px;height:60px;object-fit:cover;border-radius:8px}
+.cart-item-info{flex:1}
+.cart-item-name{font-weight:bold;margin-bottom:.3rem;font-size:.9rem}
+.cart-item-status{font-size:.8rem;color:#d4a574;font-style:italic}
+.cart-item-price{color:#8b5a3c;font-weight:bold}
+.remove-item{background:#c9302c;color:#fff;border:none;padding:.3rem .8rem;border-radius:15px;cursor:pointer;font-size:.8rem}
+.cart-total{margin-top:1.5rem;padding-top:1rem;border-top:2px solid #f0f0f0;font-size:1.4rem;font-weight:bold;text-align:right;color:#8b5a3c}
+.checkout-btn{width:100%;background:#25D366;color:#fff;border:none;padding:1rem;border-radius:25px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:1rem}
+.payment-info{background:#f0f8ff;border:1px solid #b3d9ff;border-radius:10px;padding:1rem;margin-top:1rem;text-align:center;font-size:.9rem;color:#0056b3}
+.empty-cart{text-align:center;padding:2rem;color:#999}
+footer{background:#3d2817;color:#fff;text-align:center;padding:2rem;margin-top:3rem}
+</style>
 </head>
 <body>
-    <header>
-        <div class="logo">Aimer<span>cia</span>-Fashion</div>
-        <button class="cart-btn" onclick="toggleCart()">🛍️ Panier <span class="cart-count" id="cartCount">0</span></button>
-    </header>
-
-    <section class="hero">
-        <h1><strong>Aimercia</strong>-Fashion</h1>
-        <p>L'élégance à portée de main à Kinshasa et partout en RDC</p>
-        <div class="subtitle">✨ Mode • Perruques • Livraison rapide</div>
-    </section>
-
-    <div class="info-bar">
-        📦 <strong>Livraison disponible</strong> à Kinshasa, Lubumbashi, Goma et expédition dans tout le pays.
-    </div>
-
-    <section class="products-section">
-        <h2 class="section-title">Notre Collection</h2>
-        <p class="section-subtitle">Découvrez nos pièces soigneusement sélectionnées</p>
-        
-        <div class="category-filter">
-            <button class="filter-btn active" onclick="filterProducts('all')">Tous</button>
-            <button class="filter-btn" onclick="filterProducts('vetement')">Vêtements</button>
-            <button class="filter-btn" onclick="filterProducts('perruque')">Perruques</button>
-        </div>
-
-        <div class="products-grid" id="productsGrid"></div>
-    </section>
-
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Votre Panier</h2>
-                <button class="close-cart" onclick="toggleCart()">✕</button>
-            </div>
-            <div id="cartItems"></div>
-            <div class="cart-total" id="cartTotal"></div>
-            
-            <button class="checkout-btn" onclick="checkoutWhatsApp()">
-                📱 Commander par WhatsApp
-            </button>
-            
-            <div class="payment-info">
-                <strong>💳 Moyens de paiement acceptés :</strong>
-                M-Pesa • Airtel Money • Orange Money • Cash à la livraison
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <div class="footer-brand">Aimercia-Fashion</div>
-        <p>Votre destination mode & beauté en RDC</p>
-        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">&copy; 2026 Aimercia-Fashion - Tous droits réservés</p>
-    </footer>
-
-    <script>
-        const WHATSAPP_NUMBER = "243970095825"; 
-
-        const products = [
-            { id: 1, name: "Robe Longue Imprimé Floral", description: "Style bohème chic, tissu léger et fluide", price: 45.00, emoji: "👗", category: "vetement", inStock: true },
-            { id: 2, name: "Corset Tendance à Lacets", description: "Style renaissance, met en valeur la silhouette", price: 35.00, emoji: "👚", category: "vetement", inStock: true },
-            { id: 3, name: "Ensemble Tailleur Chic", description: "Veste et pantalon assortis, élégance professionnelle", price: 85.00, emoji: "👔", category: "vetement", inStock: false },
-            { id: 4, name: "Perruque Lace Front HD 20\"", description: "Cheveux naturels, body wave, finition invisible", price: 150.00, emoji: "💇‍♀️", category: "perruque", inStock: true },
-            { id: 5, name: "Perruque Synthétique Chauffante", description: "Nouvelle génération de fibres, coupe bob stylée", price: 45.00, emoji: "💇‍♀️", category: "perruque", inStock: true },
-            { id: 6, name: "Perruque Pixie 100% Humaine", description: "Coupe courte nette et élégante, look naturel", price: 120.00, emoji: "💇‍♀️", category: "perruque", inStock: false }
-        ];
-
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let currentFilter = 'all';
-
-        function displayProducts() {
-            const grid = document.getElementById('productsGrid');
-            const filteredProducts = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
-            grid.innerHTML = filteredProducts.map(p => `
-                <div class="product-card">
-                    ${!p.inStock ? '<div class="product-badge preorder">Sur commande</div>' : ''}
-                    <div class="product-image">${p.emoji}</div>
-                    <div class="product-info">
-                        <div class="product-name">${p.name}</div>
-                        <div class="product-description">${p.description}</div>
-                        <div class="product-footer">
-                            <div class="product-price">$${p.price.toFixed(2)}</div>
-                            <button class="add-to-cart ${!p.inStock ? 'preorder' : ''}" onclick="addToCart(${p.id})">
-                                ${p.inStock ? 'Ajouter' : 'Précommander'}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function filterProducts(category) {
-            currentFilter = category;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            displayProducts();
-        }
-
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
-            if (existingItem) { existingItem.quantity++; } 
-            else { cart.push({ ...product, quantity: 1 }); }
-            saveCart(); updateCartCount();
-            showNotification(`${product.name} ${product.inStock ? 'ajouté' : 'précommandé'} !`);
-        }
-
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            saveCart(); updateCartCount(); displayCart();
-        }
-
-        function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
-        function updateCartCount() {
-            document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-        }
-
-        function displayCart() {
-            const cartItems = document.getElementById('cartItems');
-            const cartTotal = document.getElementById('cartTotal');
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<div class="empty-cart">Votre panier est vide</div>';
-                cartTotal.innerHTML = ''; return;
-            }
-            cartItems.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">${item.emoji} ${item.name} x${item.quantity}</div>
-                        ${!item.inStock ? '<div class="cart-item-status">️ Livraison : 5-10 jours</div>' : ''}
-                        <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
-                    </div>
-                    <button class="remove-item" onclick="removeFromCart(${item.id})">Retirer</button>
-                </div>
-            `).join('');
-            cartTotal.innerHTML = `Total : $${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}`;
-        }
-
-        function toggleCart() {
-            const modal = document.getElementById('cartModal');
-            modal.classList.toggle('active');
-            if (modal.classList.contains('active')) displayCart();
-        }
-
-        function checkoutWhatsApp() {
-            if (cart.length === 0) {
-                alert('Votre panier est vide !');
-                return;
-            }
-            
-            let message = "🛍️ *Nouvelle commande Aimercia-Fashion*%0A%0A";
-            let total = 0;
-            
-            cart.forEach(item => {
-                const subtotal = item.price * item.quantity;
-                total += subtotal;
-                const status = item.inStock ? "✅ En stock" : "⏱️ Sur commande (5-10j)";
-                message += `▪️ ${item.name} (x${item.quantity}) - $${subtotal.toFixed(2)} _${status}_ %0A`;
-            });
-            
-            message += `%0A *Total à payer : $${total.toFixed(2)}*%0A%0A`;
-            message += "Je souhaite payer par *M-Pesa / Airtel Money / Orange Money*. Merci de me donner les instructions pour le paiement et la livraison.";
-            
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
-        }
-
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.textContent = message;
-            notification.style.cssText = `position: fixed; top: 80px; right: 20px; background: #d4a574; color: white; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 300; font-weight: bold;`;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 2000);
-        }
-
-        displayProducts(); updateCartCount();
-    </script>
+<header>
+<div class="logo">Aimercia-Fashion</div>
+<button class="cart-btn" onclick="toggleCart()">Panier <span class="cart-count" id="cartCount">0</span></button>
+</header>
+<section class="hero">
+<h1>Aimercia-Fashion</h1>
+<p>L'élégance à portée de main en RDC</p>
+</section>
+<div class="info-bar">💬 Prix sur demande - Contactez-nous pour plus d'informations</div>
+<section class="products-section">
+<h2 class="section-title">Notre Collection</h2>
+<div class="category-filter">
+<button class="filter-btn active" onclick="filterProducts('all')">Tous</button>
+<button class="filter-btn" onclick="filterProducts('vetement')">Vêtements</button>
+<button class="filter-btn" onclick="filterProducts('perruque')">Perruques</button>
+</div>
+<div class="products-grid" id="productsGrid"></div>
+</section>
+<div class="cart-modal" id="cartModal">
+<div class="cart-content">
+<div class="cart-header">
+<h2>Votre Panier</h2>
+<button class="close-cart" onclick="toggleCart()">X</button>
+</div>
+<div id="cartItems"></div>
+<div class="cart-total" id="cartTotal"></div>
+<button class="checkout-btn" onclick="checkoutWhatsApp()">Commander par WhatsApp</button>
+<div class="payment-info">M-Pesa, Airtel Money, Orange Money acceptés</div>
+</div>
+</div>
+<footer>Aimercia-Fashion - Votre destination mode en RDC</footer>
+<script>
+const WHATSAPP_NUMBER="243970095825";
+const products=[
+{id:1,name:"Perruque Bob Lisse Noire",description:"Coupe bob élégante et lisse",price:150,image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/2e5de97411c78a18ba323010fb694c59.jpg",category:"perruque",inStock:true},
+{id:2,name:"Perruque Bouclée Naturelle",description:"Boucles définies, look naturel",price:180,image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/e5f04db4c4599f3b5b0dcc4cea059a05.jpg",category:"perruque",inStock:true},
+{id:3,name:"Perruque Wavy Longue",description:"Vagues profondes, cheveux longs",price:200,image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/3178d28f2451fedefcbbecf960f16fbd.jpg",category:"perruque",inStock:true},
+{id:4,name:"Perruque Bouclée Courte",description:"Style court et dynamique",price:120,image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/9a7641db779f980461ad7a62cb8afe8c.jpg",category:"perruque",inStock:true},
+{id:5,name:"Perruque Rousse Bouclée",description:"Couleur rousse audacieuse",price:160,image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/17962fa15b190b2a2bf6d684c7059fbd.jpg",category:"perruque",inStock:false},
+{id:6,name:"Perruque Blonde Bob",description:"Blond platine, coupe au carré",price:170,image:"https://raw.githubusercontent.com/michelmuyaya06-blip/aimercia-fashion2/main/281eb1f669da9850983198c08ba95737.jpg",category:"perruque",inStock:true}
+];
+let cart=JSON.parse(localStorage.getItem('cart'))||[];
+let currentFilter='all';
+function displayProducts(){
+const grid=document.getElementById('productsGrid');
+const filtered=currentFilter==='all'?products:products.filter(p=>p.category===currentFilter);
+grid.innerHTML=filtered.map(p=>'<div class="product-card">'+(p.inStock?'':'<div class="product-badge preorder">Sur commande</div>')+'<div class="product-image"><img src="'+p.image+'" alt="'+p.name+'"></div><div class="product-info"><div class="product-name">'+p.name+'</div><div class="product-description">'+p.description+'</div><div class="product-footer"><div class="product-price">💬 Prix sur demande</div><button class="add-to-cart '+(p.inStock?'':'preorder')+'" onclick="addToCart('+p.id+')">'+(p.inStock?'Ajouter':'Précommander')+'</button></div></div></div>').join('');
+}
+function filterProducts(category){
+currentFilter=category;
+document.querySelectorAll('.filter-btn').forEach(btn=>btn.classList.remove('active'));
+event.target.classList.add('active');
+displayProducts();
+}
+function addToCart(id){
+const p=products.find(x=>x.id===id);
+const existing=cart.find(x=>x.id===id);
+if(existing)existing.quantity++;else cart.push({...p,quantity:1});
+saveCart();updateCartCount();
+alert(p.name+' ajouté au panier !');
+}
+function removeFromCart(id){
+cart=cart.filter(x=>x.id!==id);
+saveCart();updateCartCount();displayCart();
+}
+function saveCart(){localStorage.setItem('cart',JSON.stringify(cart));}
+function updateCartCount(){document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.quantity,0);}
+function displayCart(){
+const items=document.getElementById('cartItems');
+const total=document.getElementById('cartTotal');
+if(cart.length===0){items.innerHTML='<div class="empty-cart">Panier vide</div>';total.innerHTML='';return;}
+items.innerHTML=cart.map(i=>'<div class="cart-item"><img src="'+i.image+'" alt="'+i.name+'"><div class="cart-item-info"><div class="cart-item-name">'+i.name+' x'+i.quantity+'</div>'+(!i.inStock?'<div class="cart-item-status">Livraison 5-10 jours</div>':'')+'</div><button class="remove-item" onclick="removeFromCart('+i.id+')">Retirer</button></div>').join('');
+total.innerHTML='Nombre d\'articles : '+cart.reduce((s,i)=>s+i.quantity,0);
+}
+function toggleCart(){
+const m=document.getElementById('cartModal');
+m.classList.toggle('active');
+if(m.classList.contains('active'))displayCart();
+}
+function checkoutWhatsApp(){
+if(cart.length===0){alert('Panier vide !');return;}
+let msg='🛍️ *Nouvelle commande Aimercia-Fashion*\n\n';
+cart.forEach(i=>{msg+='▪️ '+i.name+' (x'+i.quantity+')\n';});
+msg+='\n💬 *Je souhaite connaître les prix et les modalités de paiement.*\n\nMerci de me contacter.';
+window.open('https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(msg),'_blank');
+}
+displayProducts();updateCartCount();
+</script>
 </body>
 </html>
